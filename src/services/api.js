@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
-// Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
   }
 });
 
-// Add request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -24,12 +22,10 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor to handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear token and redirect to login if unauthorized
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
@@ -37,7 +33,6 @@ api.interceptors.response.use(
   }
 );
 
-// Auth services
 export const authService = {
   login: async (email, password) => {
     const response = await api.post('/users/login', { email, password });
@@ -60,7 +55,6 @@ export const authService = {
   }
 };
 
-// User services
 export const userService = {
   getUsers: async () => {
     const response = await api.get('/users');
@@ -69,12 +63,10 @@ export const userService = {
   },
 
   getCurrentUser: () => {
-    // Get user info from token
     const token = localStorage.getItem('token');
     if (!token) return null;
     
     try {
-      // Decode the JWT token to get user info
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -91,7 +83,6 @@ export const userService = {
   }
 };
 
-// Todo services
 export const todoService = {
   getTodos: async (params = {}) => {
     const response = await api.get('/todos', { params });
