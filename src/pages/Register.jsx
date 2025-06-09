@@ -34,7 +34,7 @@ const Register = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12 overflow-hidden">
-      {/* Gradient blobs */}
+    
       <div className="absolute -top-10 -left-10 h-72 w-72 rounded-full bg-purple-500 opacity-30 blur-3xl animate-ping" />
       <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-indigo-500 opacity-30 blur-3xl animate-ping" />
 
@@ -50,7 +50,7 @@ const Register = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name */}
+          
           <div className="relative group">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 h-5 w-5" />
             <input
@@ -64,7 +64,7 @@ const Register = () => {
             />
           </div>
 
-          {/* Email */}
+          
           <div className="relative group">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 h-5 w-5" />
             <input
@@ -78,7 +78,7 @@ const Register = () => {
             />
           </div>
 
-          {/* Password */}
+          
           <div className="relative group">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 h-5 w-5" />
             <input
@@ -92,7 +92,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}

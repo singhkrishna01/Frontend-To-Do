@@ -35,11 +35,11 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12">
-      {/* Glowing gradient blobs */}
+      
       <div className="absolute -top-10 -left-10 h-72 w-72 rounded-full bg-purple-500 opacity-30 blur-3xl animate-ping" />
       <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-indigo-500 opacity-30 blur-3xl animate-ping" />
 
-      {/* Card */}
+    
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -52,7 +52,7 @@ const Login = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email */}
+          
           <div className="relative group">
             <Mail className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" />
             <input
@@ -66,7 +66,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Password */}
           <div className="relative group">
             <Lock className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" />
             <input
@@ -80,7 +79,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -91,7 +89,6 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Footer */}
         <p className="mt-6 text-center text-sm text-white/70">
           Don’t have an account?{" "}
           <Link to="/register" className="text-accent font-medium hover:underline">
