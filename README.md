@@ -196,4 +196,4 @@ npm run dev -- -p 3001
 If you have any questions or need help getting started:
 
 - 📧 **Email**: krishna00cs@gmail.com
-- 💬 **Portfolio**: [Portfolio](krishna-singh.netlify.app)
+- 💬 **Portfolio**: [krishna-singh.netlify.app](krishna-singh.netlify.app)
