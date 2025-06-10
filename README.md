@@ -58,8 +58,8 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/fullstack-todo-app.git
-   cd fullstack-todo-app
+   git clone https://github.com/singhkrishna01/Frontend-To-Do
+   cd Frontend-To-Do
    ```
 
 2. **Install dependencies**
