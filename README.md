@@ -1,101 +1,200 @@
-# 🚀 ToDo App
+# 📝 Full-Stack Todo Application
 
-[🔗 Live Demo](https://frontend-to-do-mauve.vercel.app)
+A modern, responsive todo application built with Next.js, React, and MongoDB. This full-stack solution provides a seamless task management experience with real-time updates, beautiful UI, and robust data persistence.
 
----
+## ✨ Features
+
+- **📱 Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
+- **⚡ Real-time Updates** - Instant task synchronization without page refreshes
+- **🎨 Modern UI** - Clean, intuitive interface built with Tailwind CSS
+- **📊 Task Management** - Create, edit, delete, and mark tasks as complete
+- **🔍 Smart Filtering** - Filter tasks by status (All, Active, Completed)
+- **💾 Persistent Storage** - Reliable data storage with MongoDB
+- **🚀 Fast Performance** - Optimized with Next.js App Router and Server Components
 
 ## 🛠️ Tech Stack
 
-* **React.js** – Modern UI library for building interactive interfaces
-* **Next.js** – React framework with server-side rendering & routing
-* **MongoDB** – NoSQL database for flexible, scalable storage
-* **JavaScript** – Core scripting language powering the app
-* **Tailwind CSS** – Utility-first CSS framework for sleek, responsive design
+### Frontend
+- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
+- **[React 18](https://reactjs.org/)** - UI library with hooks and context
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Framer Motion](https://www.framer.com/motion/)** - Smooth animations and transitions
 
----
+### Backend
+- **[Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)** - Serverless API endpoints
+- **[MongoDB](https://www.mongodb.com/)** - NoSQL database for data persistence
+- **[Mongoose](https://mongoosejs.com/)** - MongoDB object modeling
 
-## ✨ About the Project
+### Development Tools
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety and better DX
+- **[ESLint](https://eslint.org/)** - Code linting and formatting
+- **[Prettier](https://prettier.io/)** - Code formatting
 
-A sleek, modern **ToDo app** designed to help users manage daily tasks effortlessly. Features include:
+## 📸 Screenshots
 
-* **User Authentication** for secure personal task management
-* Task management with **priorities & multiple tags** for better organization
-* Fully **responsive design** powered by Tailwind CSS, works flawlessly on mobile & desktop
-* Built with **Next.js** for fast performance and SEO-friendly pages
-* Data persistence handled by **MongoDB**, ensuring your todos are safe
+### Login Page
+![Desktop Dashboard](public/assets/1.png)
 
----
+### To-Do List Page
+![Mobile Interface](public/assets/2.png)
 
-## 🚀 How to Run Locally
+### To-Do Detail Page
+![Task Management](public/assets/3.png)
 
-1. **Clone the repo**
+### Completed To-Do History
+![Dark Mode](public/assets/4.png)
 
+## 🚀 Quick Start
+
+### Prerequisites
+
+Make sure you have the following installed on your machine:
+- **Node.js** (version 18.0 or higher)
+- **npm** or **yarn** package manager
+- **MongoDB** (local installation or MongoDB Atlas account)
+- **Git** for version control
+
+### Installation
+
+1. **Clone the repository**
    ```bash
-   git clone <repo-url>
-   cd <repo-folder>
+   git clone https://github.com/yourusername/fullstack-todo-app.git
+   cd fullstack-todo-app
    ```
 
 2. **Install dependencies**
-
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-3. **Configure environment variables**
-   Create a `.env.local` file at the root:
-
+3. **Set up environment variables**
+   
+   Create a `.env` file in the root directory:
    ```env
-   MONGODB_URI=<your-mongodb-connection-string>
-   NEXTAUTH_URL=http://localhost:3000
+   # MongoDB Connection
+   MONGODB_URI=mongodb://localhost:27017/todoapp
+   # For MongoDB Atlas:
+   # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/todoapp
+   
    ```
 
-4. **Start the development server**
+4. **Set up MongoDB**
+   
+   **Option A: Local MongoDB**
+   - Install MongoDB Community Server
+   - Start MongoDB service:
+     ```bash
+     # macOS
+     brew services start mongodb-community
+     
+     # Linux
+     sudo systemctl start mongod
+     
+     # Windows
+     net start MongoDB
+     ```
+   
+   **Option B: MongoDB Atlas (Cloud)**
+   - Create account at [MongoDB Atlas](https://www.mongodb.com/atlas)
+   - Create a new cluster
+   - Get connection string and update `MONGODB_URI`
 
+5. **Run the development server**
    ```bash
    npm run dev
+   # or
+   yarn dev
    ```
 
-5. **Open in browser**
-   Go to [http://localhost:3000/login](http://localhost:3000/login)
+6. **Open your browser**
+   
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
 
----
+## 🔧 Available Scripts
 
-## 🎯 Assumptions & Design Decisions
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server on port 3000 |
+| `npm run build` | Build the application for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint for code quality |
+| `npm run type-check` | Run TypeScript type checking |
 
-* Simple UX/UI focused on rapid task creation and management
-* User authentication to ensure privacy and personalized experiences
-* Leveraged **Next.js** for SSR to improve load speed and SEO
-* Tailwind CSS chosen for fast, consistent styling without heavy CSS bloat
-* MongoDB for flexible schema, easy to extend with future features
-* Core features prioritized to keep UI clean, minimal, and intuitive
+## 🌐 API Endpoints
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/todos` | Fetch all todos |
+| `POST` | `/api/todos` | Create a new todo |
+| `PUT` | `/api/todos/[id]` | Update a specific todo |
+| `DELETE` | `/api/todos/[id]` | Delete a specific todo |
 
-## 🌟 Additional Features & Improvements
 
-* **Multi-tagging:** Organize todos with multiple tags for advanced filtering
-* **Task Priority Levels:** High, medium, and low priority to help focus on what matters
-* **Mobile Friendly:** Fully responsive UI that looks great on phones and tablets
-* **Secure Auth:** Sign up and login flows with session management
-* **Form Validation:** Prevents invalid input and guides users for better UX
-* **Loading States:** User-friendly loading spinners and feedback
-* **Planned Enhancements:**
+## 🎨 Customization
 
-  * Push notifications for reminders
-  * Drag-and-drop task reordering
-  * Dark mode for eye comfort
-  * Offline support with data caching
+### Tailwind Configuration
 
----
+The project uses a custom Tailwind configuration with:
+- Custom color palette
+- Extended spacing scale
+- Custom font families
+- Responsive breakpoints
+
+## 🔄 State Management
+
+The application uses React's built-in state management:
+- **useState** for component-level state
+- **useEffect** for side effects and API calls
+- **Context API** for global state (theme, user preferences)
+
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**MongoDB Connection Issues**
+```bash
+# Check if MongoDB is running
+mongosh
+# or
+mongo --version
+```
+
+**Port Already in Use**
+```bash
+# Kill process on port 3000
+npx kill-port 3000
+# or use different port
+npm run dev -- -p 3001
+```
+
+**Environment Variables**
+- Ensure `.env` file exists
+- Check MongoDB URI format
+- Restart development server after changes
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-* Open issues for bugs or feature requests
-* Submit pull requests for improvements or new features
 
----
+## 🙏 Acknowledgments
 
-### Made with ❤️ using React, Next.js, MongoDB & Tailwind CSS
+- **Next.js Team** for the amazing React framework
+- **Vercel** for hosting and deployment platform
+- **MongoDB** for the robust database solution
+- **Tailwind CSS** for the utility-first CSS framework
 
+## 📞 Support
+
+If you have any questions or need help getting started:
+
+- 📧 **Email**: your.email@example.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/fullstack-todo-app/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/fullstack-todo-app/discussions)
