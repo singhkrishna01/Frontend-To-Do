@@ -195,6 +195,5 @@ npm run dev -- -p 3001
 
 If you have any questions or need help getting started:
 
-- 📧 **Email**: your.email@example.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/fullstack-todo-app/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/fullstack-todo-app/discussions)
+- 📧 **Email**: krishna00cs@gmail.com
+- 💬 **Portfolio**: [Portfolio](krishna-singh.netlify.app)
