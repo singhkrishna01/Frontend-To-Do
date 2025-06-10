@@ -313,22 +313,6 @@ const TodoList = () => {
                 />
 
                 <select
-                  value={filters.mention}
-                  onChange={(e) =>
-                    handleFilterChange("mention", e.target.value)
-                  }
-                  className="rounded-xl border-2 border-gray-200 px-4 py-3 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200 bg-white"
-                  disabled={filterLoading}
-                >
-                  <option value="">👥 All Users</option>
-                  {userOptions.map((user) => (
-                    <option key={user.value} value={user.value}>
-                      @{user.label}
-                    </option>
-                  ))}
-                </select>
-
-                <select
                   value={filters.completed}
                   onChange={(e) =>
                     handleFilterChange("completed", e.target.value)
@@ -963,6 +947,7 @@ const TodoList = () => {
                   await handleCreateTodo(todoData);
                   setShowCreateModal(false);
                 }}
+                handleUpdateTodo={handleUpdateTodo}
                 users={users}
               />
             </div>

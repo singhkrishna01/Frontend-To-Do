@@ -1,9 +1,77 @@
 import React, { useState } from 'react';
-import { Loader2, X, Edit2, Save, XCircle, Tag, Users, Clock, FileText, ChevronDown } from 'lucide-react';
+import { Loader2, X, Edit2, Save, XCircle, Tag, Users, Clock, FileText, ChevronDown, AtSign } from 'lucide-react';
+
+// Todo List Component to show mentions in list view
+const TodoList = ({ todos, onSelectTodo, handleUpdateTodo }) => {
+  return (
+    <div className="space-y-3">
+      {todos.map((todo) => (
+        <div 
+          key={todo._id}
+          onClick={() => onSelectTodo(todo)}
+          className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 cursor-pointer"
+        >
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-semibold text-gray-900 flex-1">{todo.title}</h3>
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+              todo.priority === 'high' ? 'bg-red-100 text-red-700' :
+              todo.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+              'bg-green-100 text-green-700'
+            }`}>
+              {todo.priority}
+            </span>
+          </div>
+          
+          {todo.description && (
+            <p className="text-gray-600 text-sm mb-3 line-clamp-2">{todo.description}</p>
+          )}
+          
+          {/* Mentions in Todo List */}
+          {todo.mentions && todo.mentions.length > 0 && (
+            <div className="flex items-center gap-2 mb-2">
+              <AtSign className="h-3 w-3 text-blue-500" />
+              <div className="flex flex-wrap gap-1">
+                {todo.mentions.slice(0, 3).map((mention) => (
+                  <span 
+                    key={mention._id}
+                    className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs"
+                  >
+                    <div className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs">
+                      {mention.name.charAt(0).toUpperCase()}
+                    </div>
+                    @{mention.username}
+                  </span>
+                ))}
+                {todo.mentions.length > 3 && (
+                  <span className="text-xs text-gray-500">+{todo.mentions.length - 3} more</span>
+                )}
+              </div>
+            </div>
+          )}
+          
+          {/* Tags in Todo List */}
+          {todo.tags && todo.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {todo.tags.slice(0, 3).map((tag) => (
+                <span key={tag} className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs">
+                  {tag}
+                </span>
+              ))}
+              {todo.tags.length > 3 && (
+                <span className="text-xs text-gray-500">+{todo.tags.length - 3} more</span>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const TodoDetails = ({ todo, onClose, onUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState(null);
   const [editedTodo, setEditedTodo] = useState({
     title: todo?.title || '',
     description: todo?.description || '',
@@ -12,7 +80,9 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
     mentions: todo?.mentions?.map(m => m.username) || []
   });
   const [tagInput, setTagInput] = useState('');
+  const [mentionInput, setMentionInput] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showList, setShowList] = useState(!todo); // Show list if no todo provided
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -29,30 +99,25 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
     });
   };
 
-const handleSave = async () => {
-  setLoading(true);
-  try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Show success animation
-    setShowSuccess(true);
-    setIsEditing(false);
-    
-    // Simulate closing after delay
-    setTimeout(() => {
-      setShowSuccess(false);
-      if (onClose) {
-        onClose();
-      }
-    }, 1500);
-  } catch (error) {
-    console.error('Error updating todo:', error);
-    // Optionally handle error state here
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await new Promise(onUpdate(displayTodo?._id, editedTodo));
+      setShowSuccess(true);
+      setIsEditing(false);
+      
+      setTimeout(() => {
+        setShowSuccess(false);
+        if (onClose) {
+          onClose();
+        }
+      }, 1500);
+    } catch (error) {
+      console.error('Error updating todo:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,10 +137,31 @@ const handleSave = async () => {
     }
   };
 
+  const handleMentionKeyDown = (e) => {
+    if (e.key === 'Enter' && mentionInput.trim()) {
+      e.preventDefault();
+      const username = mentionInput.replace('@', '').trim();
+      if (!editedTodo.mentions.includes(username)) {
+        setEditedTodo(prev => ({
+          ...prev,
+          mentions: [...prev.mentions, username]
+        }));
+      }
+      setMentionInput('');
+    }
+  };
+
   const removeTag = (tagToRemove) => {
     setEditedTodo(prev => ({
       ...prev,
       tags: prev.tags.filter(tag => tag !== tagToRemove)
+    }));
+  };
+
+  const removeMention = (mentionToRemove) => {
+    setEditedTodo(prev => ({
+      ...prev,
+      mentions: prev.mentions.filter(mention => mention !== mentionToRemove)
     }));
   };
 
@@ -98,34 +184,78 @@ const handleSave = async () => {
   };
 
   // Mock data for demonstration
-  const mockTodo = {
-    title: "Complete React Todo App",
-    description: "Build a fully functional todo application with React, including user authentication, real-time updates, and responsive design.",
-    priority: "high",
-    tags: ["React", "JavaScript", "Frontend", "UI/UX"],
-    mentions: [
-      { _id: "1", name: "John Doe", username: "johndoe" },
-      { _id: "2", name: "Jane Smith", username: "janesmith" },
-      { _id: "3", name: "Mike Johnson", username: "mikej" }
-    ],
-    createdAt: new Date().toISOString(),
-    notes: [
-      {
-        _id: "1",
-        content: "Started working on the component structure. Need to focus on responsive design.",
-        createdAt: new Date(Date.now() - 86400000).toISOString(),
-        createdBy: { name: "John Doe" }
-      },
-      {
-        _id: "2",
-        content: "Added user mention functionality. Testing the UI components.",
-        createdAt: new Date(Date.now() - 43200000).toISOString(),
-        createdBy: { name: "Jane Smith" }
-      }
-    ]
-  };
+  const mockTodos = [
+    {
+      _id: "1",
+      title: "Complete React Todo App",
+      description: "Build a fully functional todo application with React, including user authentication, real-time updates, and responsive design.",
+      priority: "high",
+      tags: ["React", "JavaScript", "Frontend", "UI/UX"],
+      mentions: [
+        { _id: "1", name: "John Doe", username: "johndoe" },
+        { _id: "2", name: "Jane Smith", username: "janesmith" },
+        { _id: "3", name: "Mike Johnson", username: "mikej" }
+      ],
+      createdAt: new Date().toISOString(),
+      notes: [
+        {
+          _id: "1",
+          content: "Started working on the component structure. Need to focus on responsive design.",
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+          createdBy: { name: "John Doe" }
+        },
+        {
+          _id: "2",
+          content: "Added user mention functionality. Testing the UI components.",
+          createdAt: new Date(Date.now() - 43200000).toISOString(),
+          createdBy: { name: "Jane Smith" }
+        }
+      ]
+    },
+    {
+      _id: "2",
+      title: "Design System Documentation",
+      description: "Create comprehensive documentation for the design system including components, guidelines, and best practices.",
+      priority: "medium",
+      tags: ["Design", "Documentation", "UI/UX"],
+      mentions: [
+        { _id: "4", name: "Sarah Wilson", username: "sarahw" },
+        { _id: "5", name: "Alex Chen", username: "alexc" }
+      ],
+      createdAt: new Date(Date.now() - 172800000).toISOString(),
+      notes: []
+    },
+    {
+      _id: "3",
+      title: "API Integration Testing",
+      description: "Test all API endpoints and ensure proper error handling and data validation.",
+      priority: "high",
+      tags: ["API", "Testing", "Backend"],
+      mentions: [
+        { _id: "6", name: "David Brown", username: "davidb" }
+      ],
+      createdAt: new Date(Date.now() - 259200000).toISOString(),
+      notes: []
+    }
+  ];
 
-  const displayTodo = todo || mockTodo;
+  const displayTodo = selectedTodo || todo || mockTodos[0];
+
+  if (showList && !selectedTodo) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">Todo List</h1>
+              <p className="text-gray-600">Click on any todo to see details</p>
+            </div>
+            <TodoList todos={mockTodos} onSelectTodo={setSelectedTodo} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
@@ -171,16 +301,27 @@ const handleSave = async () => {
 
               {/* Action Buttons */}
               <div className="flex gap-2 items-center">
+                {showList && (
+                  <button
+                    onClick={() => {
+                      setSelectedTodo(null);
+                      setShowList(true);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-200 text-sm"
+                  >
+                    ← Back to List
+                  </button>
+                )}
                 {isEditing ? (
                   <>
-                    <button
-                      onClick={handleSave}
-                      disabled={loading}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 disabled:opacity-50 text-sm"
-                    >
-                      {loading ? <Loader2 className="animate-spin h-4 w-4" /> : <Save size={16} />}
-                      Save
-                    </button>
+<button
+        onClick={handleSave}
+        disabled={loading}
+        className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 disabled:opacity-50 text-sm"
+      >
+        {loading ? <Loader2 className="animate-spin h-4 w-4" /> : <Save size={16} />}
+        Save
+      </button>
                     <button
                       onClick={handleCancel}
                       className="flex items-center gap-2 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-200 text-sm"
@@ -212,8 +353,8 @@ const handleSave = async () => {
 
           {/* Content */}
           <div className="p-6 space-y-6">
-            {/* Priority and Description Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Priority and Mentions Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Priority */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
@@ -239,29 +380,75 @@ const handleSave = async () => {
                 )}
               </div>
 
-              {/* Mentions */}
-              {displayTodo.mentions?.length > 0 && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-gray-600" />
-                    <h3 className="text-sm font-semibold text-gray-800">Mentioned Users</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {displayTodo.mentions.map((mention, index) => (
-                      <div
-                        key={mention._id}
-                        className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-medium"
-                      >
-                        <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center text-xs">
-                          {mention.name.charAt(0).toUpperCase()}
-                        </div>
-                        <span>{mention.name}</span>
-                        <span className="text-white/70">@{mention.username}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Mentioned Users */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <AtSign className="h-4 w-4 text-gray-600" />
+                  <h3 className="text-sm font-semibold text-gray-800">Mentioned Users</h3>
+                  
                 </div>
-              )}
+                {isEditing ? (
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap gap-2">
+                      {editedTodo.mentions.map((username) => (
+                        <span 
+                          key={username} 
+                          className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full flex items-center gap-2 text-xs"
+                        >
+                          @{username}
+                          <button 
+                            onClick={() => removeMention(username)} 
+                            className="hover:bg-white/20 rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      value={mentionInput}
+                      onChange={(e) => setMentionInput(e.target.value)}
+                      onKeyDown={handleMentionKeyDown}
+                      placeholder="Type @username and press Enter"
+                      className="w-full border border-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400 text-sm"
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {displayTodo.mentions?.length > 0 ? (
+                      <div className="space-y-2">
+                        {displayTodo.mentions.map((mention) => {
+                          // Handle both object and string formats
+                          const name = typeof mention === 'string' ? mention : mention.name;
+                          const username = typeof mention === 'string' ? mention : mention.username;
+                          const id = typeof mention === 'string' ? mention : mention._id;
+                          
+                          return (
+                            <div
+                              key={id}
+                              className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-cyan-50 p-3 rounded-lg border border-blue-100"
+                            >
+                              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                                {name ? name.charAt(0).toUpperCase() : username.charAt(0).toUpperCase()}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  {name && <span className="font-medium text-gray-900 text-sm">{name}</span>}
+                                  <span className="text-blue-600 text-sm">@{username}</span>
+                                </div>
+                              </div>
+                              <Users className="h-4 w-4 text-blue-500" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 italic text-sm bg-gray-50 p-3 rounded-lg">No users mentioned yet.</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Description */}
@@ -375,6 +562,12 @@ const handleSave = async () => {
         }
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
+        }
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
       `}</style>
     </div>

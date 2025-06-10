@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { todoService, userService } from '../services/api';
 
-const TodoForm = ({ onSubmit, initialData = null }) => {
+const TodoForm = ({ onSubmit, initialData = null, handleUpdateTodo }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -187,7 +187,7 @@ const TodoForm = ({ onSubmit, initialData = null }) => {
         >
           <option value="">Select user to mention</option>
           {filteredUsers.map(user => (
-            <option key={user._id} value={user.username}>{user.name} (@{user.username})</option>
+            <option key={user._id} value={user.username}>{user.name}</option>
           ))}
         </select>
         {loadingUsers && <p className="text-sm text-gray-500 mt-1">Loading users...</p>}
