@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Loader2, X, Edit2, Save, XCircle, Tag, Users, Clock, FileText, ChevronDown, AtSign } from 'lucide-react';
 
-// Todo List Component to show mentions in list view
 const TodoList = ({ todos, onSelectTodo, handleUpdateTodo }) => {
   return (
     <div className="space-y-3">
@@ -26,7 +25,6 @@ const TodoList = ({ todos, onSelectTodo, handleUpdateTodo }) => {
             <p className="text-gray-600 text-sm mb-3 line-clamp-2">{todo.description}</p>
           )}
           
-          {/* Mentions in Todo List */}
           {todo.mentions && todo.mentions.length > 0 && (
             <div className="flex items-center gap-2 mb-2">
               <AtSign className="h-3 w-3 text-blue-500" />
@@ -49,7 +47,6 @@ const TodoList = ({ todos, onSelectTodo, handleUpdateTodo }) => {
             </div>
           )}
           
-          {/* Tags in Todo List */}
           {todo.tags && todo.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {todo.tags.slice(0, 3).map((tag) => (
@@ -82,7 +79,7 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
   const [tagInput, setTagInput] = useState('');
   const [mentionInput, setMentionInput] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showList, setShowList] = useState(!todo); // Show list if no todo provided
+  const [showList, setShowList] = useState(!todo);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -183,7 +180,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
     }
   };
 
-  // Mock data for demonstration
   const mockTodos = [
     {
       _id: "1",
@@ -259,7 +255,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-      {/* Success Overlay */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 animate-fadeIn">
           <div className="bg-white rounded-2xl p-8 text-center shadow-2xl animate-bounce max-w-sm mx-4">
@@ -270,10 +265,9 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
         </div>
       )}
 
-      {/* Main Container */}
       <div className="w-full max-w-4xl mx-auto">
         <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
-          {/* Header */}
+          
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6">
             <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
               <div className="flex-1 min-w-0">
@@ -299,7 +293,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex gap-2 items-center">
                 {showList && (
                   <button
@@ -351,11 +344,8 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
             </div>
           </div>
 
-          {/* Content */}
           <div className="p-6 space-y-6">
-            {/* Priority and Mentions Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Priority */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <ChevronDown className="h-4 w-4 text-gray-600" />
@@ -380,7 +370,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
                 )}
               </div>
 
-              {/* Mentioned Users */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <AtSign className="h-4 w-4 text-gray-600" />
@@ -419,7 +408,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
                     {displayTodo.mentions?.length > 0 ? (
                       <div className="space-y-2">
                         {displayTodo.mentions.map((mention) => {
-                          // Handle both object and string formats
                           const name = typeof mention === 'string' ? mention : mention.name;
                           const username = typeof mention === 'string' ? mention : mention.username;
                           const id = typeof mention === 'string' ? mention : mention._id;
@@ -451,7 +439,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
               </div>
             </div>
 
-            {/* Description */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4 text-gray-600" />
@@ -473,7 +460,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
               )}
             </div>
 
-            {/* Tags */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Tag className="h-4 w-4 text-gray-600" />
@@ -522,7 +508,6 @@ const TodoDetails = ({ todo, onClose, onUpdate }) => {
               )}
             </div>
 
-            {/* Notes Section */}
             {displayTodo.notes?.length > 0 && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">

@@ -148,21 +148,18 @@ const TodoList = () => {
     }
   };
 
-  // Debounced filter change handler
   const handleFilterChange = useCallback((filterType, value) => {
     setFilters((prev) => ({
       ...prev,
       [filterType]: value,
     }));
 
-    // Reset pagination when filters change
     setPagination((prev) => ({
       ...prev,
       page: 1,
     }));
   }, []);
 
-  // Debounced search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (
@@ -199,24 +196,22 @@ const TodoList = () => {
   };
 
   useEffect(() => {
-  if (selectedTodo) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
+    if (selectedTodo) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-  // Clean up when component unmounts or modal closes
-  return () => {
-    document.body.style.overflow = 'auto';
-  };
-}, [selectedTodo]);
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedTodo]);
 
   const handleLogout = () => {
     authService.logout();
     navigate("/login");
   };
 
-  // Memoized user options for performance
   const userOptions = useMemo(
     () => users.map((user) => ({ value: user.username, label: user.name })),
     [users]
@@ -225,7 +220,6 @@ const TodoList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
-        {/* Enhanced Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 sm:gap-0 mb-12 bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
           <div>
             <h1 className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -266,11 +260,8 @@ const TodoList = () => {
           </div>
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-          {/* Todos List */}
           <div className="xl:col-span-3 bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
-            {/* Enhanced Filters */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                 <svg
@@ -350,7 +341,6 @@ const TodoList = () => {
               </div>
             </div>
 
-            {/* Status Messages */}
             {filterLoading && (
               <div className="text-center py-4 text-indigo-600 font-medium bg-indigo-50 rounded-xl mb-6 px-4 sm:px-0">
                 <div className="flex items-center justify-center gap-2">
@@ -597,7 +587,6 @@ const TodoList = () => {
               </div>
             )}
 
-            {/* Enhanced Pagination */}
             {pagination.totalPages > 1 && (
               <div className="mt-8 flex justify-center items-center gap-2">
                 <button
@@ -647,7 +636,6 @@ const TodoList = () => {
             )}
           </div>
 
-          {/* Enhanced Stats */}
           <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 h-fit">
             <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <svg
@@ -688,7 +676,6 @@ const TodoList = () => {
           </div>
         </div>
 
-        {/* Enhanced History Section */}
         <div className="mt-8 md:mt-12 px-4 sm:px-6 lg:px-0">
           <div className="bg-white rounded-xl md:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 border border-gray-100">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
@@ -798,7 +785,6 @@ const TodoList = () => {
                               </div>
                             </div>
 
-                            {/* Tags */}
                             {todo.tags && todo.tags.length > 0 && (
                               <div className="mt-3 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 ml-4">
                                 {todo.tags.map((tag, index) => (
@@ -825,7 +811,6 @@ const TodoList = () => {
                               </div>
                             )}
 
-                            {/* Mentions */}
                             {todo.mentions && todo.mentions.length > 0 && (
                               <div className="mt-2 sm:mt-3 flex flex-wrap gap-1.5 sm:gap-2 ml-4">
                                 {todo.mentions.map((mention) => (
@@ -907,7 +892,6 @@ const TodoList = () => {
           </div>
         </div>
 
-        {/* Enhanced Modals */}
         {selectedTodo && (
           <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
             <div className="transform transition-all duration-300 scale-100">
@@ -955,7 +939,6 @@ const TodoList = () => {
         )}
       </div>
 
-      {/* Custom styles */}
       <style jsx>{`
         @keyframes fadeIn {
           from {
